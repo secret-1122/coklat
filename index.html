@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ucapan Spesial Untukmu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- --- KODE CSS (Diperbarui untuk Mobile Scroll) --- -->
+    <style>
+        /* --- Gaya Umum & Tema Baru --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* PERUBAHAN: Pastikan html dan body mengisi tinggi layar untuk scroll yang konsisten */
+        html, body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(to bottom, #ff9a9e, #fecfef, #fad0c4);
+            color: #5d4037;
+            height: 100%; /* PERUBAHAN: Tambahkan ini */
+            overflow-x: hidden; /* Hanya disable scroll horizontal */
+            scroll-behavior: smooth; /* Agar scroll lebih halus */
+        }
+
+        /* --- Halaman Login --- */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            transition: opacity 0.5s ease-out;
+            z-index: 1000;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .login-container h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #e91e63;
+            text-shadow: 0 0 10px rgba(233, 30, 99, 0.3);
+        }
+
+        .login-container p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #6d4c41;
+        }
+
+        #password-input {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #f8bbd0;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #5d4037;
+            font-size: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        #password-input:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 15px #e91e63;
+            border-color: #e91e63;
+        }
+
+        .login-container button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            background: #e91e63;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background: #c2185b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(194, 24, 91, 0.4);
+        }
+
+        .error {
+            color: #d32f2f;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* --- Halaman Utama --- */
+        #main-content {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .content-wrapper {
+            max-width: 800px;
+            z-index: 10;
+            animation: fadeInUp 1.5s ease-out;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            margin: 0 auto;
+        }
+
+        #main-content h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            color: #c2185b;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        .main-message {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #5d4037;
+            font-weight: 400;
+        }
+
+        #magic-button {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: 2px solid #e91e63;
+            border-radius: 50px;
+            background: transparent;
+            color: #e91e63;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        #magic-button:hover {
+            background: #e91e63;
+            color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(233, 30, 99, 0.5);
+        }
+
+        /* --- Efek Hati Jatuh --- */
+        #hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(233, 30, 99, 0.6);
+            font-size: 20px;
+            animation-timing-function: linear;
+        }
+        
+        /* --- Animasi --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(200vh) rotate(360deg); 
+            }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(80px); }
+        }
+
+        /* --- RESPONSIVE UNTUK MOBILE (DIPERBAIKI UNTUK SCROLL) --- */
+        @media (max-width: 768px) {
+            /* PERUBAHAN: Kurangi padding di layar kecil agar lebih banyak ruang untuk scroll */
+            #main-content {
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+
+            .login-container {
+                padding: 30px 20px;
+                width: 90%;
+            }
+            .login-container h1 {
+                font-size: 2.2rem;
+            }
+            .content-wrapper {
+                padding: 25px 15px;
+                width: 95%;
+            }
+            #main-content h1 {
+                font-size: 2.8rem;
+            }
+            .main-message {
+                font-size: 1.1rem;
+            }
+            #magic-button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Halaman Login -->
+    <div id="login-screen">
+        <div class="login-container">
+            <h1>Secret Massage</h1>
+            <p>Masukin kata sandinya dulu yaa</p>
+            <form id="login-form">
+                <input type="password" id="password-input" placeholder="Kata Sandi..." required>
+                <button type="submit">Masuk</button>
+            </form>
+            <p id="error-message" class="error"></p>
+        </div>
+    </div>
+
+    <!-- Halaman Utama (Awalnya Tersembunyi) -->
+    <div id="main-content">
+        <div class="content-wrapper">
+            <header>
+                <h1>From Fans No1 <br> To You</h1>
+            </header>
+            <main>
+                <p class="main-message">
+                    Haii maaf yaa kalo aku cuman ngasih ini untuk hari yang bahagia ini, Aku harap kamu sukaa. <br>Aku cuman mau bilang
+                </p>
+                <p class="main-message">
+                    makasih yaa udah mau deket sama aku untuk saat ini. Dan aku harap kamu selalu bahagia mulai dari saat ini hingga seterusnya.
+                </p>
+                <p class="main-message">
+                    i will not give up to be someone special for you <br>
+                    if not today then in the future, if not in this world then in another world
+                </p>
+                <p class="main-message">
+                    #Fans No 1 Otw Naik Jabatan
+                </p>
+                <button id="magic-button">Klik Aku! 💖</button>
+            </main>
+        </div>
+        <div id="hearts-container"></div>
+    </div>
+
+    <!-- --- KODE JAVASCRIPT (TIDAK PERLU DIUBAH) --- -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- ELEMEN DOM ---
+            const loginScreen = document.getElementById('login-screen');
+            const mainContent = document.getElementById('main-content');
+            const loginForm = document.getElementById('login-form');
+            const passwordInput = document.getElementById('password-input');
+            const errorMessage = document.getElementById('error-message');
+            const magicButton = document.getElementById('magic-button');
+            const heartsContainer = document.getElementById('hearts-container');
+
+            // --- KONFIGURASI ---
+            const correctPassword = "cantik"; // <<< GANTI KATA SANDI DI SINI
+            let heartInterval;
+
+            // --- LOGIKA LOGIN ---
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const enteredPassword = passwordInput.value;
+
+                if (enteredPassword === correctPassword) {
+                    loginScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loginScreen.style.display = 'none';
+                        mainContent.style.display = 'block'; // Ubah ke block agar scroll bekerja
+                        startHeartRain();
+                    }, 500);
+                } else {
+                    errorMessage.textContent = 'Kata sandi salah, coba lagi ya! 😉';
+                    passwordInput.value = '';
+                    passwordInput.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        passwordInput.style.animation = '';
+                    }, 500);
+                }
+            });
+
+            // --- FUNGSI EFEK HATI ---
+            function createHeart(isBurst = false) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '♥';
+                heart.style.left = Math.random() * 100 + '%';
+                
+                if (isBurst) {
+                    const animationDuration = Math.random() * 1.5 + 1.5;
+                    heart.style.fontSize = `${Math.random() * 15 + 15}px`;
+                    heart.style.animationDuration = `${animationDuration}s`;
+                    heart.style.animationName = 'fall';
+                } else {
+                    const animationDuration = Math.random() * 3 + 5;
+                    heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+                    heart.style.animationDuration = `${animationDuration}s, ${animationDuration / 4}s`;
+                    heart.style.animationName = 'fall, sway';
+                }
+
+                heartsContainer.appendChild(heart);
+
+                const removeTime = isBurst ? 3000 : animationDuration * 1000;
+                setTimeout(() => {
+                    heart.remove();
+                }, removeTime);
+            }
+
+            function startHeartRain() {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => createHeart(false), i * 300);
+                }
+                heartInterval = setInterval(() => createHeart(false), 800);
+            }
+            
+            function stopHeartRain() {
+                clearInterval(heartInterval);
+            }
+            
+            function burstHearts() {
+                stopHeartRain();
+                for (let i = 0; i < 40; i++) {
+                    setTimeout(() => createHeart(true), i * 50);
+                }
+                setTimeout(startHeartRain, 4000);
+            }
+
+            magicButton.addEventListener('click', burstHearts);
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+                    20%, 40%, 60%, 80% { transform: translateX(10px); }
+                }
+            `;
+            document.head.appendChild(style);
+
+        });
+    </script>
+</body>
+</html>
